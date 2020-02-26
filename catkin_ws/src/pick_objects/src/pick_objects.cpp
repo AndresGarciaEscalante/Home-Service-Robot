@@ -11,35 +11,56 @@ int main(int argc, char** argv){
 
   //tell the action client that we want to spin a thread by default
   MoveBaseClient ac("move_base", true);
-
+  
   // Wait 5 sec for move_base action server to come up
   while(!ac.waitForServer(ros::Duration(5.0))){
     ROS_INFO("Waiting for the move_base action server to come up");
   }
-
   move_base_msgs::MoveBaseGoal goal;
 
   // set up the frame parameters
   goal.target_pose.header.frame_id = "map";
   goal.target_pose.header.stamp = ros::Time::now();
 
-  // Define a position and orientation for the robot to reach
+  // Define a position and orientation for the first stop
   goal.target_pose.pose.position.x = -0.5;
   goal.target_pose.pose.position.y = 3.5;
   goal.target_pose.pose.orientation.w = 1.0;
 
-   // Send the goal position and orientation for the robot to reach
-  ROS_INFO("Sending goal");
+   // Send the goal position and orientation for the pick up 
+  ROS_INFO("Sending to first stop");
   ac.sendGoal(goal);
-
   // Wait an infinite time for the results
   ac.waitForResult();
 
-  // Check if the robot reached its goal
-  if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+  // Check if the robot reached the pick up location
+  if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
     ROS_INFO("First stop completed");
+    //Wait 5 seconds to start the next task
+    sleep(5);
+    // Define the position to drop off the object
+    goal.target_pose.pose.position.x = 1.0;
+    goal.target_pose.pose.position.y = -4.0;
+    goal.target_pose.pose.orientation.w = 1.0;
+
+    // Send the position and orientation for the drop off
+    ROS_INFO("Sending to second stop");
+    ac.sendGoal(goal);
+    
+    // Wait an infinite time for the results
+    ac.waitForResult();
+    
+    // Check if robot reached the drop off location
+    if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
+      ROS_INFO("Second stop completed");
+    }
+    
+    else{
+      ROS_INFO("The robot was not able to complete task 2");  
+    }
+  }
   else
-    ROS_INFO("The robot was not able to complete the task");
+    ROS_INFO("The robot was not able to complete task 1");
 
   return 0;
 }
