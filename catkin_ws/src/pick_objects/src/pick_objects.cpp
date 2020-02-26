@@ -24,9 +24,9 @@ int main(int argc, char** argv){
   goal.target_pose.header.stamp = ros::Time::now();
 
   // Define a position and orientation for the robot to reach
-  goal.target_pose.pose.position.x = 0.0;
-  goal.target_pose.pose.position.y = 1.0;
-  goal.target_pose.pose.orientation.w = 0.0;
+  goal.target_pose.pose.position.x = -0.5;
+  goal.target_pose.pose.position.y = 3.5;
+  goal.target_pose.pose.orientation.w = 1.0;
 
    // Send the goal position and orientation for the robot to reach
   ROS_INFO("Sending goal");
@@ -37,9 +37,9 @@ int main(int argc, char** argv){
 
   // Check if the robot reached its goal
   if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-    ROS_INFO("Hooray, the base moved 1 meter forward");
+    ROS_INFO("First stop completed");
   else
-    ROS_INFO("The base failed to move forward 1 meter for some reason");
+    ROS_INFO("The robot was not able to complete the task");
 
   return 0;
 }
