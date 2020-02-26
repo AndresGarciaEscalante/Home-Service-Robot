@@ -1,8 +1,8 @@
 #!/bin/sh
-xterm  -e  " roslaunch /home/andres/Home-Service-Robot/catkin_ws/src/turtlebot_simulator/turtlebot_gazebo/launch/turtlebot_world.launch" &
+xterm  -e  " roslaunch turtlebot_gazebo turtlebot_world.launch" &
 sleep 5
-xterm  -e  " roslaunch /home/andres/Home-Service-Robot/catkin_ws/src/turtlebot_simulator/turtlebot_gazebo/launch/gmapping_demo.launch" & 
+xterm  -e  " roslaunch turtlebot_gazebo gmapping_demo.launch" & 
 sleep 5
-xterm  -e  " roslaunch /home/andres/Home-Service-Robot/catkin_ws/src/turtlebot_interactions/turtlebot_rviz_launchers/launch/view_navigation.launch" &
+xterm  -e  " roslaunch turtlebot_rviz_launchers view_navigation.launch" &
 sleep 5
-xterm  -e  " roslaunch /home/andres/Home-Service-Robot/catkin_ws/src/turtlebot/turtlebot_teleop/launch/keyboard_teleop.launch" 
+xterm  -e  " roslaunch turtlebot_teleop keyboard_teleop.launch" 
