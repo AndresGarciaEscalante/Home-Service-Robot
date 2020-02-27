@@ -28,14 +28,14 @@ int main(int argc, char** argv){
   goal.target_pose.pose.orientation.w = 1.0;
 
    // Send the goal position and orientation for the pick up 
-  ROS_INFO("Sending to first stop");
+  ROS_INFO("Robot is traveling to the pick up zone");
   ac.sendGoal(goal);
   // Wait an infinite time for the results
   ac.waitForResult();
 
   // Check if the robot reached the pick up location
   if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
-    ROS_INFO("First stop completed");
+    ROS_INFO("Robot picked up the virtual box");
     //Wait 5 seconds to start the next task
     sleep(5);
     // Define the position to drop off the object
@@ -44,7 +44,7 @@ int main(int argc, char** argv){
     goal.target_pose.pose.orientation.w = 1.0;
 
     // Send the position and orientation for the drop off
-    ROS_INFO("Sending to second stop");
+    ROS_INFO("Robot is traveling to the drop off zone");
     ac.sendGoal(goal);
     
     // Wait an infinite time for the results
@@ -52,7 +52,7 @@ int main(int argc, char** argv){
     
     // Check if robot reached the drop off location
     if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
-      ROS_INFO("Second stop completed");
+      ROS_INFO("Robot dropped the virtual box");
     }
     
     else{
@@ -61,6 +61,6 @@ int main(int argc, char** argv){
   }
   else
     ROS_INFO("The robot was not able to complete task 1");
-
+  sleep(5);
   return 0;
 }

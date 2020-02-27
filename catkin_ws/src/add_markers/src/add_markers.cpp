@@ -2,19 +2,30 @@
 #include <visualization_msgs/Marker.h>
 #include <nav_msgs/Odometry.h>
 
+//Flags that provide the status of the robot
+bool pick_up= false;
+bool drop_off=false;
+
 void chatterCallback (const nav_msgs::Odometry::ConstPtr& msg){
+  //Retrieve position of the robot provided by the Odom
   double x = msg->pose.pose.position.x;
   double y = msg->pose.pose.position.y;
-  ROS_INFO(" x: %f, y: %f",x,y);
+  //ROS_INFO(" x: %f, y: %f",x,y);
 
+  // Robot lies in the Pick Up Area (Including Error)
   if(x >= -4.40 && x <= -4.35 && y >= -3.60 && y <= -3.50){
-    ROS_INFO("First Goal");
+    pick_up= true;
   }
-  else if (x >= 2.50 && x <= 3.0 && y >= -2.15 && y <= -1.75){
-    ROS_INFO("Second Goal");
+  // Robot lies in the Drop Off Area (Including Error)
+  else if (x >= 2.50 && x <= 3.0 && y >= -2.03 && y <= -1.95){
+    drop_off=true;
   }
-  
-}
+  // Robot is in its way to a specific location 
+  else{
+    pick_up= false;
+    drop_off=false;
+  }
+} 
 
 int main( int argc, char** argv )
 {
@@ -57,9 +68,9 @@ int main( int argc, char** argv )
   marker.scale.z = 0.1;
 
   // Set the color -- be sure to set alpha to something non-zero!
-  marker.color.r = 1.0f;
+  marker.color.r = 0.0f;
   marker.color.g = 0.0f;
-  marker.color.b = 0.0f;
+  marker.color.b = 1.0f;
   marker.color.a = 1.0;
 
   marker.lifetime = ros::Duration();
@@ -71,33 +82,35 @@ int main( int argc, char** argv )
     {
       return 0;
     }
-    ROS_INFO("Please create a subscriber to the marker");
+    ROS_WARN_ONCE("Please create a subscriber to the marker");
     sleep(1);
   }
   //Publish the marker (Make it appear on the Pick Up location on Rviz) 
   marker_pub.publish(marker);
-  sleep(5.0);
-  
-  //Publish the marker (Make it disappear on Rviz)
-  marker.action = visualization_msgs::Marker::DELETE;
-  marker_pub.publish(marker);
-  sleep(5.0);
-  
-  //Publish the marker (Make it appear on the Drop off location on Rviz)
-  marker.action = visualization_msgs::Marker::ADD;
-  // Set the pose of the marker for the Drop Off location
-  marker.pose.position.x = 1.0;
-  marker.pose.position.y = -4.0;
-  marker.pose.position.z = 0.05;
-  marker.pose.orientation.x = 0.0;
-  marker.pose.orientation.y = 0.0;
-  marker.pose.orientation.z = 0.0;
-  marker.pose.orientation.w = 1.0;
-  marker_pub.publish(marker);
-  sleep(5.0);
-  
-  ros::spin();
 
+  while (ros::ok()){
+    //Checks the Callback function
+    ros::spinOnce(); 
+    // Robot in Pick Up zone
+    if(pick_up == true){
+      //Publish the marker (Make it disappear on Rviz)
+      marker.action = visualization_msgs::Marker::DELETE;
+      marker_pub.publish(marker);
+    }
+    // Robot in Drop off zone
+    else if (drop_off == true){
+      //Publish the marker (Make it appear on the Drop off location on Rviz)
+      marker.action = visualization_msgs::Marker::ADD;
+      // Set the pose of the marker for the Drop Off location
+      marker.pose.position.x = 1.0;
+      marker.pose.position.y = -4.0;
+      marker.pose.position.z = 0.05;
+      marker.pose.orientation.x = 0.0;
+      marker.pose.orientation.y = 0.0;
+      marker.pose.orientation.z = 0.0;
+      marker.pose.orientation.w = 1.0;
+      marker_pub.publish(marker);     
+    } 
+  }
   return 0;
 }
-
