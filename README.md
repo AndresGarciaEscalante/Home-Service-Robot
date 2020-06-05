@@ -1,7 +1,9 @@
 # Home-Service-Robot
 ## Using Gazebo, Rviz, and ROS
 
-<img src="images/home_service_robot.png" height="500" width="500">
+<p align="center">
+  <img width="500" height="500" src="images/home_service_robot.png">
+</p>
 
 ## Setting up the enviroment:
 For this project the following set up was used:
@@ -48,7 +50,9 @@ $ ./src/shell_scripts/home_service.sh
 ### turtlebot Package
 It provides information of the **turtlebot** model such as the **URDF, Gazebo, and other related files** and functions like the **teleoperation**. 
 
-<img src="images/turtlebot.png" align="mid" height="500" width="500">
+<p align="center">
+  <img width="500" height="500" src="images/turtlebot.png">
+</p>
 
 For more detailed information please refere to the following link:
 [turtlebot](http://wiki.ros.org/turtlebot_teleop)
@@ -56,7 +60,9 @@ For more detailed information please refere to the following link:
 ### turtlebot_simulator Package 
 The main purpose of this package is to put together the **simulated world** and the **robot model** in the **gazebo environment**. It has **many launch files** such as the ```amcl.launch```, ```gmapping.launch```, and ```turtlebot.world.launch```.
 
-<img src="images/world.png" width="500" height="500">
+<p align="center">
+  <img width="500" height="500" src="images/world.png">
+</p>
 
 For more detailed information please refere to the following link:
 [turtlebot_simulator](http://wiki.ros.org/turtlebot_gazebo)
@@ -64,7 +70,9 @@ For more detailed information please refere to the following link:
 ### turtlebot_interactions Package 
 It displays the information from **topics** used in the ```turtlebot_simulator Package``` using **Rviz**. It also stores **Rviz configuration files**.
 
-<img src="images/rviz.png" height="500" width="500">
+<p align="center">
+  <img width="500" height="500" src="images/rviz.png">
+</p>
 
 For more detailed information please refere to the following link:
 [turtlebot_interactions](http://wiki.ros.org/turtlebot_rviz_launchers)
